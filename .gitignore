@@ -1,2 +1,5 @@
 node_modules/
 bower_components/
+Gruntfile.js
+changelog.txt
+npm-debug.log

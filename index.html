@@ -3,10 +3,38 @@
 <meta charset="utf8">
 <head>
     <title>Encontre a saída mais próxima</title>
-    <script src="lib/crafty.js"></script>
+    <script src="lib/crafty-min.js"></script>
     <script src="src/components.js"></script>
     <script src="src/game.js"></script>
-    <script type="text/javascript"> window.addEventListener('load', Game.start);</script>
+    <script src="http://localhost:8080/socket.io/socket.io.js"></script>
+    <script type="text/javascript">
+        var socket = io.connect('http://localhost:8080', {multicast: true});
+        socket.on('joined', function(data){
+            Game.map_grid = data.map_grid;
+            Game.backGround = data.backGround;
+            Game.start();
+            Game.createCharacter(data.x, data.y, data.id);
+            socket.emit('getPlayers');
+        })
+
+        socket.on('newPlayer', function(data){
+            console.log(data);
+            Game.createPlayer(data.position.x, data.position.y, data.id);
+        })
+
+        socket.on('playerMoving', function(data){
+            Crafty(data.player).x = data.position.x;
+            Crafty(data.player).y = data.position.y;
+        })
+
+        socket.on('playerLeft', function(data){
+            Crafty(data.id).destroy();
+        })
+
+        socket.on('disconnect', function(){
+            Crafty(socket.id).destroy();
+        })
+    </script>
 </head>
 <body>
 
