@@ -36,7 +36,7 @@ var Game = {
         Crafty.c(id, {
           init: function() {
             this.requires('Actor, Color, Solid')
-              .color('rgb(20, 125, 40)');
+              .color('rgb(255, 0, 0)');
           },
         });
         Crafty.e(id).at(x, y);
