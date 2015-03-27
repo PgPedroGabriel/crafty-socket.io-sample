@@ -21,15 +21,28 @@ var Game = {
           init: function() {
             this.requires('Actor, Fourway, Color, Collision')
               .fourway(0.5)
+              .checkHits('Solid')
               .color('rgb(20, 75, 40)')
               .bind('Moved', this.moved)
+              .bind('HitOn', function(hitData){
+
+                if(this.x <= hitData[0].obj.x )
+                    this.x -= 1;
+                else
+                    this.x += 1;
+
+                if(this.y <= hitData[0].obj.y )
+                    this.y -= 1;
+                else
+                    this.y += 1;
+
+              })
           },
           moved: function(data){
             socket.emit('moving', data);
             return this;
           }
         });
-        console.log(id);
         Crafty.e(id).at(x, y);
     },
     createPlayer: function(x,y,id){
